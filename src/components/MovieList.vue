@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { tmdbApi } from '@/api/tmdb';
+import { tmdbApi } from '@/api/tmdb'
 
 export default {
   name: 'MovieList',
@@ -26,12 +26,12 @@ export default {
   },
   async created() {
     try {
-      const response = await tmdbApi.getPopular();
-      this.movies = response.data.results;
+      const response = await tmdbApi.getPopular()
+      this.movies = response.data.results
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error('Error:', error)
     } finally {
-      this.loading = false;
+      this.loading = false
     }
   }
 }
