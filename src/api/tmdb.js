@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-// API 키 확인
-console.log('API Key:', process.env.VUE_APP_TMDB_API_KEY);
-
 const instance = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
     params: {
@@ -24,5 +21,10 @@ export const tmdbApi = {
                 throw error;
             });
     },
-    // ... 나머지 메서드들
+    getMovieDetails: (id) => instance.get(`/movie/${id}`),
+    getNowPlaying: () => instance.get('/movie/now_playing'),
+    getTopRated: () => instance.get('/movie/top_rated'),
+    searchMovies: (query) => instance.get('/search/movie', {
+        params: { query }
+    })
 };

@@ -2,12 +2,19 @@
   <div class="movie-list">
     <div v-if="loading">Loading...</div>
     <div v-else class="movie-grid">
-      <div v-for="movie in movies" :key="movie.id" class="movie-card">
+      <div v-for="movie in movies" 
+           :key="movie.id" 
+           class="movie-card"
+           @click="goToDetail(movie.id)">
         <img 
           :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" 
           :alt="movie.title"
         >
         <h3>{{ movie.title }}</h3>
+        <div class="movie-info">
+          <p>평점: {{ movie.vote_average }}/10</p>
+          <p>개봉일: {{ movie.release_date }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -22,6 +29,11 @@ export default {
     return {
       movies: [],
       loading: true
+    }
+  },
+  methods: {
+    goToDetail(movieId) {
+      this.$router.push(`/movie/${movieId}`)
     }
   },
   async created() {
@@ -47,6 +59,10 @@ export default {
 
 .movie-card {
   transition: transform 0.3s ease;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .movie-card:hover {
@@ -61,5 +77,14 @@ export default {
 .movie-card h3 {
   margin-top: 10px;
   font-size: 1rem;
+}
+
+.movie-info {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.movie-info p {
+  margin: 5px 0;
 }
 </style>
