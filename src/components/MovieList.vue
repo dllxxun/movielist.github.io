@@ -10,10 +10,11 @@
           :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" 
           :alt="movie.title"
         >
-        <h3>{{ movie.title }}</h3>
         <div class="movie-info">
-          <p>평점: {{ movie.vote_average }}/10</p>
-          <p>개봉일: {{ movie.release_date }}</p>
+          <h3>{{ movie.title }}</h3>
+          <div class="genres">
+            {{ getGenres(movie.genre_ids) }}
+          </div>
         </div>
       </div>
     </div>
@@ -28,22 +29,33 @@ export default {
   data() {
     return {
       movies: [],
-      loading: true
-    }
-  },
-  methods: {
-    goToDetail(movieId) {
-      this.$router.push(`/movie/${movieId}`)
+      loading: true,
+      genres: []
     }
   },
   async created() {
     try {
+      // 장르 정보 가져오기
+      const genresResponse = await tmdbApi.getGenres()
+      this.genres = genresResponse.data.genres
+      
       const response = await tmdbApi.getPopular()
       this.movies = response.data.results
     } catch (error) {
       console.error('Error:', error)
     } finally {
       this.loading = false
+    }
+  },
+  methods: {
+    getGenres(genreIds) {
+      return genreIds
+        .map(id => this.genres.find(genre => genre.id === id)?.name)
+        .filter(name => name)
+        .join(', ')
+    },
+    goToDetail(movieId) {
+      this.$router.push(`/movie/${movieId}`)
     }
   }
 }
@@ -60,7 +72,9 @@ export default {
 .movie-card {
   transition: transform 0.3s ease;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  cursor: pointer;
   padding: 10px;
   border-radius: 8px;
 }
@@ -69,22 +83,36 @@ export default {
   transform: scale(1.05);
 }
 
-.movie-card img {
-  width: 100%;
-  border-radius: 8px;
+.movie-card:hover {
+  transform: scale(1.05);
 }
 
-.movie-card h3 {
-  margin-top: 10px;
-  font-size: 1rem;
+.movie-card img {
+  width: 100%;
+  display: block;
+  border-radius: 8px 8px 0 0;
 }
 
 .movie-info {
-  font-size: 0.9rem;
-  color: #666;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.8);
 }
 
-.movie-info p {
-  margin: 5px 0;
+.movie-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: white;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.genres {
+  font-size: 0.9rem;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

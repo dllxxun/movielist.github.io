@@ -52,6 +52,20 @@ export const tmdbApi = {
                 throw error;
             });
     },
+    // 장르 목록 가져오기 메서드 추가
+    getGenres: () => {
+        console.log('장르 목록 요청 시작');
+        return instance.get('/genre/movie/list')
+            .then(response => {
+                console.log('장르 목록 응답:', response.data.genres.length + '개 항목');
+                return response;
+            })
+            .catch(error => {
+                console.error('장르 목록 에러:', error);
+                throw error;
+            });
+    },
+    // 영화 상세 정보 메서드 수정
     getMovieDetails: (id) => {
         console.log('영화 상세 정보 요청:', id);
         return instance.get(`/movie/${id}`)
@@ -61,6 +75,34 @@ export const tmdbApi = {
             })
             .catch(error => {
                 console.error('영화 상세 정보 에러:', error);
+                throw error;
+            });
+    },
+    // 영화 비디오(예고편) 가져오기 메서드 추가
+    getMovieVideos: (id) => {
+        console.log('영화 비디오 요청:', id);
+        return instance.get(`/movie/${id}/videos`)
+            .then(response => {
+                console.log('영화 비디오 응답:', response.data.results.length + '개 항목');
+                return response;
+            })
+            .catch(error => {
+                console.error('영화 비디오 에러:', error);
+                throw error;
+            });
+    },
+    // 장르별 영화 가져오기 메서드 추가
+    getMoviesByGenre: (genreId) => {
+        console.log('장르별 영화 요청:', genreId);
+        return instance.get('/discover/movie', {
+            params: { with_genres: genreId }
+        })
+            .then(response => {
+                console.log('장르별 영화 응답:', response.data.results.length + '개 항목');
+                return response;
+            })
+            .catch(error => {
+                console.error('장르별 영화 에러:', error);
                 throw error;
             });
     },
