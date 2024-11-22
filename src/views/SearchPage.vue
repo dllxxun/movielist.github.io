@@ -49,10 +49,7 @@
         />
         <div class="movie-info">
           <h3>{{ movie.title }}</h3>
-          <div class="meta">
-            <span>⭐ {{ movie.vote_average.toFixed(1) }}</span>
-            <span>📅 {{ movie.release_date }}</span>
-          </div>
+          <div class="rating">⭐ {{ movie.vote_average.toFixed(1) }}</div>
         </div>
       </div>
     </div>
@@ -190,13 +187,20 @@ export default {
 
 .movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 20px;
 }
 
 .movie-card {
   cursor: pointer;
   transition: transform 0.3s ease;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
 }
 
 .movie-card:hover {
@@ -205,13 +209,29 @@ export default {
 
 .movie-info {
   padding: 10px;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
 }
 
-.meta {
+.movie-meta {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.movie-info h3 {
   font-size: 0.9rem;
-  color: #666;
+  margin: 0 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rating {
+  color: #ffffff;
+  font-size: 0.85rem;
 }
 
 .loading {
