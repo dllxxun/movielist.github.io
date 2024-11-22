@@ -2,11 +2,15 @@
   <div id="app">
     <nav class="navigation">
       <div class="nav-left">
-        <router-link to="/">Home</router-link>
+        <router-link to="/home">Home</router-link>
       </div>
       <div class="nav-right">
-        <div class="search-icon" @click="goToSearch">
-          🔍
+        <div v-if="isLoggedIn" class="user-menu">
+          <span class="search-icon" @click="goToSearch">🔍</span>
+          <span class="nickname" @click="toggleDropdown">{{ userNickname }}님</span>
+          <div v-if="showDropdown" class="dropdown">
+            <button @click="handleLogout">로그아웃</button>
+          </div>
         </div>
       </div>
     </nav>
@@ -18,9 +22,40 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isLoggedIn: false,
+      userNickname: '',
+      showDropdown: false
+    }
+  },
+  created() {
+    this.checkLoginStatus()
+  },
   methods: {
+    checkLoginStatus() {
+      this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
+      if (this.isLoggedIn) {
+        this.userNickname = localStorage.getItem('userNickname')
+      }
+    },
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown
+    },
+    handleLogout() {
+      localStorage.removeItem('isLoggedIn')
+      localStorage.removeItem('rememberMe')
+      this.isLoggedIn = false
+      this.showDropdown = false
+      this.$router.push('/signin')
+    },
     goToSearch() {
       this.$router.push('/search')
+    }
+  },
+  watch: {
+    $route() {
+      this.checkLoginStatus()
     }
   }
 }
@@ -57,7 +92,61 @@ body {
 }
 
 .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-icon {
+  cursor: pointer;
+  padding: 8px;
+}
+
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.nickname {
   color: #e5e5e5;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #141414;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.dropdown button {
+  background: none;
+  border: none;
+  color: #e5e5e5;
+  cursor: pointer;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdown button:hover {
+  background-color: #333;
+}
+
+.signin-link, .logout-link {
+  color: #e5e5e5;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.signin-link:hover, .logout-link:hover {
+  color: #ffffff;
 }
 
 .search-icon {
