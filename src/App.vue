@@ -2,8 +2,10 @@
   <div id="app">
     <nav class="navigation">
       <div class="nav-left">
-        <router-link to="/home">Home</router-link>
+        <span class="home-link" @click="goToHome">Home</span>
+        <span class="wishlist-link" @click="goToWishlist">내가 찜한 콘텐츠</span>
       </div>
+      
       <div class="nav-right">
         <div v-if="isLoggedIn" class="user-menu">
           <span class="search-icon" @click="goToSearch">🔍</span>
@@ -49,6 +51,12 @@ export default {
       this.showDropdown = false
       this.$router.push('/signin')
     },
+    goToHome() {
+      this.$router.push('/home')
+    },
+    goToWishlist() {
+      this.$router.push('/wishlist')
+    },
     goToSearch() {
       this.$router.push('/search')
     }
@@ -85,10 +93,26 @@ body {
 }
 
 .nav-left a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-link {
   color: #bb1616;
-  text-decoration: none;
   font-weight: 800;
   font-size: xx-large;
+  cursor: pointer;
+}
+
+.wishlist-link {
+  color: #e5e5e5;
+  padding: 25px;
+  cursor: pointer;
+}
+
+.wishlist-link:hover {
+  color: #ffffff;
 }
 
 .nav-right {

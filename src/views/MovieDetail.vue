@@ -10,6 +10,9 @@
           <div class="meta">
             <span class="year">{{ getYear(movie.release_date) }}</span>
             <span class="rating">⭐ {{ formatRating(movie.vote_average) }}</span>
+            <span class="heart-icon" @click="toggleFavorite">
+              {{ isFavorite ? '❤️' : '🤍' }}
+            </span>
             <div class="genres">{{ getGenres(movie.genres) }}</div>
           </div>
           <p class="overview">{{ movie.overview }}</p>
@@ -36,7 +39,8 @@ export default {
   data() {
     return {
       movie: null,
-      trailerKey: null
+      trailerKey: null,
+      isFavorite: false
     }
   },
   async created() {
@@ -65,10 +69,34 @@ export default {
     formatRating(rating) {
       return Math.round(rating * 10) / 10
     },
+    toggleFavorite() {
+      // localStorage에서 현재 찜 목록 가져오기
+      let favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+      
+      if (this.isFavorite) {
+        // 찜 목록에서 제거
+        favorites = favorites.filter(item => item.id !== this.movie.id)
+        this.isFavorite = false
+      } else {
+        // 찜 목록에 추가
+        favorites.push(this.movie)
+        this.isFavorite = true
+      }
+      
+      // 변경된 찜 목록 저장
+      localStorage.setItem('favorites', JSON.stringify(favorites))
+    },
+    checkIfFavorite() {
+      const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+      this.isFavorite = favorites.some(item => item.id === this.movie.id)
+    },
+    mounted() {
+    this.checkIfFavorite()
+    },
     getGenres(genres) {
       return genres.map(genre => genre.name).join(', ')
     }
-  }
+  },
 }
 </script>
 
@@ -93,6 +121,16 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
+}
+
+.heart-icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.heart-icon:hover {
+  transform: scale(1.2);
 }
 
 .content {

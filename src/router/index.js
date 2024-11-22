@@ -3,6 +3,7 @@ import MovieList from '@/components/MovieList.vue'
 import MovieDetail from '@/views/MovieDetail.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import SignInPage from '@/views/SignIn.vue'
+import WishlistPage from '@/views/WishlistPage.vue'
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: SearchPage
+  },
+  {
+    path: '/wishlist',
+    name: 'Wishlist',
+    component: WishlistPage
   }
 ]
 
