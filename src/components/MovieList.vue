@@ -18,6 +18,9 @@
         </div>
       </div>
     </div>
+    <div v-if="isLoading" class="loading-more">
+        더 많은 영화 불러오는 중...
+    </div>
   </div>
 </template>
 
@@ -30,7 +33,10 @@ export default {
     return {
       movies: [],
       loading: true,
-      genres: []
+      genres: [],
+      currentPage: 1,
+      isLoading: false,
+      hasMore: true
     }
   },
   async created() {
@@ -48,6 +54,44 @@ export default {
     }
   },
   methods: {
+    async fetchMovies() {
+      try {
+        const genresResponse = await tmdbApi.getGenres()
+        this.genres = genresResponse.data.genres
+        
+        const response = await tmdbApi.getPopular(this.currentPage)
+        this.movies = response.data.results
+        this.loading = false
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    },
+    async loadMoreMovies() {
+      if (this.isLoading || !this.hasMore) return
+      
+      this.isLoading = true
+      try {
+        const response = await tmdbApi.getPopular(this.currentPage + 1)
+        const newMovies = response.data.results
+        
+        if (newMovies.length === 0) {
+          this.hasMore = false
+        } else {
+          this.movies = [...this.movies, ...newMovies]
+          this.currentPage += 1
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      } finally {
+        this.isLoading = false
+      }
+    },
+    handleScroll() {
+      const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 100
+      if (bottom && !this.isLoading) {
+        this.loadMoreMovies()
+      }
+    },
     getGenres(genreIds) {
       return genreIds
         .map(id => this.genres.find(genre => genre.id === id)?.name)
@@ -57,6 +101,13 @@ export default {
     goToDetail(movieId) {
       this.$router.push(`/movie/${movieId}`)
     }
+  },
+  mounted() {
+    this.fetchMovies()
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>

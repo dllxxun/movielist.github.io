@@ -40,9 +40,11 @@ instance.interceptors.response.use(
 );
 
 export const tmdbApi = {
-    getPopular: () => {
+    getPopular: (page = 1) => {
         console.log('인기 영화 요청 시작');
-        return instance.get('/movie/popular')
+        return instance.get('/movie/popular', {
+            params: { page }
+        })
             .then(response => {
                 console.log('인기 영화 응답:', response.data.results.length + '개 항목');
                 return response;

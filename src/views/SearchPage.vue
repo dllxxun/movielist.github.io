@@ -34,6 +34,48 @@
 
       <button @click="resetFilters" class="reset-button">필터 초기화</button>
     </div>
+     <!-- 카테고리별 섹션 추가 -->
+    <div class="category-section">
+      <h2>넷플릭스 인기 콘텐츠</h2>
+      <div class="scroll-container">
+        <div
+          v-for="movie in popularMovies"
+          :key="movie.id"
+          class="movie-card"
+          @click="goToDetail(movie.id)"
+        >
+          <img
+            :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+            :alt="movie.title"
+          />
+          <div class="movie-info">
+            <h3>{{ movie.title }}</h3>
+            <div class="rating">⭐ {{ movie.vote_average.toFixed(1) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category-section">
+      <h2>다시보기 추천 콘텐츠</h2>
+      <div class="scroll-container">
+        <div
+          v-for="movie in recommendedMovies"
+          :key="movie.id"
+          class="movie-card"
+          @click="goToDetail(movie.id)"
+        >
+          <img
+            :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+            :alt="movie.title"
+          />
+          <div class="movie-info">
+            <h3>{{ movie.title }}</h3>
+            <div class="rating">⭐ {{ movie.vote_average.toFixed(1) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 결과 섹션 -->
     <div class="movies-grid" v-if="!loading">
