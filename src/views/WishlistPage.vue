@@ -46,7 +46,18 @@ export default {
     }
   },
   methods: {
+    loadFavorites() {
+      const savedFavorites = localStorage.getItem('favorites')
+      if (savedFavorites) {
+        // 중복 제거하여 로드
+        const favorites = JSON.parse(savedFavorites)
+        const uniqueFavorites = Array.from(new Set(favorites.map(f => f.id)))
+          .map(id => favorites.find(f => f.id === id))
+        this.favorites = uniqueFavorites
+      }
+    },
     goToDetail(movieId) {
+      // router.push 메서드를 사용하여 영화 상세 페이지로 이동
       this.$router.push(`/movie/${movieId}`)
     },
     removeFromFavorites(movieId) {

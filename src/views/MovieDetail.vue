@@ -58,6 +58,7 @@ export default {
       if (trailer) {
         this.trailerKey = trailer.key
       }
+      this.checkIfFavorite()
     } catch (error) {
       console.error('Error:', error)
     }
@@ -72,26 +73,66 @@ export default {
     toggleFavorite() {
       // localStorage에서 현재 찜 목록 가져오기
       let favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+      const movieId = this.movie.id
+
+      // 이미 찜한 영화인지 확인
+      const existingIndex = favorites.findIndex(item => item.id === movieId)
       
-      if (this.isFavorite) {
+      if (existingIndex !== -1) {
         // 찜 목록에서 제거
-        favorites = favorites.filter(item => item.id !== this.movie.id)
+        favorites.splice(existingIndex, 1)
         this.isFavorite = false
       } else {
-        // 찜 목록에 추가
-        favorites.push(this.movie)
-        this.isFavorite = true
+        // 찜 목록에 추가 (중복 방지)
+        if (!favorites.some(item => item.id === movieId)) {
+          favorites.push({
+            id: movieId,
+            title: this.movie.title,
+            poster_path: this.movie.poster_path,
+            vote_average: this.movie.vote_average
+          })
+          this.isFavorite = true
+        }
       }
       
       // 변경된 찜 목록 저장
       localStorage.setItem('favorites', JSON.stringify(favorites))
     },
     checkIfFavorite() {
+      if (!this.movie) return
+      
       const favorites = JSON.parse(localStorage.getItem('favorites') || '[]')
       this.isFavorite = favorites.some(item => item.id === this.movie.id)
     },
+    // created 훅 수정 - checkIfFavorite 호출 추가
     mounted() {
-    this.checkIfFavorite()
+      this.checkIfFavorite()
+    },
+    // 라우트 변경을 감지하는 watch 추가
+    watch: {
+      '$route': {
+        immediate: true,
+        async handler() {
+          try {
+            const movieId = this.$route.params.id
+            const [movieResponse, videosResponse] = await Promise.all([
+              tmdbApi.getMovieDetails(movieId),
+              tmdbApi.getMovieVideos(movieId)
+            ])
+          
+            this.movie = movieResponse.data
+            const trailer = videosResponse.data.results.find(
+              video => video.type === 'Trailer' && video.site === 'YouTube'
+            )
+            if (trailer) {
+              this.trailerKey = trailer.key
+            }
+            this.checkIfFavorite()
+          } catch (error) {
+            console.error('Error:', error)
+          }
+        }
+      }
     },
     getGenres(genres) {
       return genres.map(genre => genre.name).join(', ')

@@ -41,12 +41,12 @@ export default {
   },
   async created() {
     try {
-      // 장르 정보 가져오기
       const genresResponse = await tmdbApi.getGenres()
       this.genres = genresResponse.data.genres
       
       const response = await tmdbApi.getPopular()
-      this.movies = response.data.results
+      // 중복 제거 적용
+      this.movies = this.removeDuplicateMovies(response.data.results)
     } catch (error) {
       console.error('Error:', error)
     } finally {
@@ -91,6 +91,19 @@ export default {
       if (bottom && !this.isLoading) {
         this.loadMoreMovies()
       }
+    },
+    removeDuplicateMovies(movies) {
+      const uniqueMovies = [];
+      const seenIds = new Set();
+    
+      movies.forEach(movie => {
+        if (!seenIds.has(movie.id)) {
+          seenIds.add(movie.id);
+          uniqueMovies.push(movie);
+        }
+      });
+    
+      return uniqueMovies;
     },
     getGenres(genreIds) {
       return genreIds
