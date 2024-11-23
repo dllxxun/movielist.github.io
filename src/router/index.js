@@ -1,3 +1,4 @@
+
 import { createRouter, createWebHistory } from 'vue-router'
 import MovieList from '@/components/MovieList.vue'
 import MovieDetail from '@/views/MovieDetail.vue'

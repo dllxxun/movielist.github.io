@@ -1,3 +1,4 @@
+
 <template>
   <div class="movie-detail" v-if="movie">
     <div class="backdrop" :style="{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})` }">
