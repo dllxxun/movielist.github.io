@@ -21,6 +21,9 @@
     <div v-if="isLoading" class="loading-more">
         더 많은 영화 불러오는 중...
     </div>
+    <button v-show="showTopButton" @click="scrollToTop" class="scroll-top">
+      Top ↑
+    </button>
   </div>
 </template>
 
@@ -36,7 +39,8 @@ export default {
       genres: [],
       currentPage: 1,
       isLoading: false,
-      hasMore: true
+      hasMore: true,
+      showTopButton: false
     }
   },
   async created() {
@@ -91,6 +95,10 @@ export default {
       if (bottom && !this.isLoading) {
         this.loadMoreMovies()
       }
+      this.showTopButton = window.scrollY > 300
+    },
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     },
     removeDuplicateMovies(movies) {
       const uniqueMovies = [];
@@ -178,5 +186,22 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.scroll-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #e50914;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.scroll-top:hover {
+  background-color: #ff0a16;
 }
 </style>
