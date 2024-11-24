@@ -10,7 +10,7 @@
             <img :src="getImageUrl(movie.poster_path)" :alt="movie.title">
             <div class="movie-info">
               <div class="badge new" v-if="movie.release_date">새로운 시리즈</div>
-              <div class="badge hot" v-if="movie.vote_average >= 8">진심 등극</div>
+              
             </div>
           </div>
         </div>

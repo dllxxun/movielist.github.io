@@ -15,7 +15,11 @@
         <option value="12">모험</option>
         <option value="16">애니메이션</option>
         <option value="35">코미디</option>
-        <!-- 필요한 장르 추가 -->
+        <option value="27">공포</option>
+        <option value="9648">미스터리</option>
+        <option value="18">드라마</option>
+        <option value="53">스릴러</option>
+        <option value="14">판타지</option>
       </select>
 
       <select v-model="minRating" @change="applyFilters">
@@ -36,7 +40,6 @@
     </div>
      <!-- 카테고리별 섹션 추가 -->
     <div class="category-section">
-      <h2>넷플릭스 인기 콘텐츠</h2>
       <div class="scroll-container">
         <div
           v-for="movie in popularMovies"
