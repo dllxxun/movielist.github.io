@@ -33,6 +33,11 @@ const routes = [
     component: SearchPage
   },
   {
+    path: '/popular',
+    name: 'Popular',
+    component: () => import('@/views/PopularPage.vue')
+  },
+  {
     path: '/wishlist',
     name: 'Wishlist',
     component: WishlistPage
