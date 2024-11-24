@@ -5,6 +5,7 @@
       <div class="nav-left">
         <span class="home-link" @click="goToHome">Home</span>
         <span class="wishlist-link" @click="goToWishlist">내가 찜한 콘텐츠</span>
+        <span class="popular-link" @click="goToPopular">대세 콘텐츠</span>
       </div>
       
       <div class="nav-right">
@@ -60,6 +61,9 @@ export default {
     },
     goToSearch() {
       this.$router.push('/search')
+    },
+    goToPopular() {
+    this.$router.push('/popular')
     }
   },
   watch: {
@@ -113,6 +117,16 @@ body {
 }
 
 .wishlist-link:hover {
+  color: #ffffff;
+}
+
+.popular-link {
+  color: #e5e5e5;
+  padding: 25px;
+  cursor: pointer;
+}
+
+.popular-link:hover {
   color: #ffffff;
 }
 
