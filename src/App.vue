@@ -116,7 +116,7 @@ body {
 }
 
 .wishlist-link:hover {
-  color: #ffffff;
+  color: #ff0000;
 }
 
 .popular-link {
@@ -126,7 +126,7 @@ body {
 }
 
 .popular-link:hover {
-  color: #ffffff;
+  color: #ff0000;
 }
 
 .nav-right {
