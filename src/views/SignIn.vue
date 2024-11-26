@@ -1,7 +1,7 @@
 
 <template>
   <div class="auth-container">
-    <div class="auth-box">
+    <div class="auth-box" :class="{ 'slide-up': !isLogin }">
       <transition name="fade" mode="out-in">
         <!-- 로그인 폼 -->
         <form v-if="isLogin" @submit.prevent="handleLogin" key="login">
@@ -250,15 +250,36 @@ button:hover {
   color: #ff0000;
 }
 
+/* 박스 슬라이드 효과 */
+.auth-box {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-box.slide-up {
+  transform: translateY(-20px);
+}
+
+/* 입력 필드 포커스 효과 */
+input:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* 전환 링크 효과 */
+.switch-form span {
+  position: relative;
+}
+
 /* 애니메이션 효과 */
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(50px);
 }
 </style>
