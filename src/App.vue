@@ -25,6 +25,7 @@
     <div class="main-content">
       <router-view @theme-changed="updateTheme"></router-view>
     </div>
+    
   </div>
 </template>
 

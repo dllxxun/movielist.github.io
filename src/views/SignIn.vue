@@ -178,16 +178,18 @@ export default {
   border-radius: 4px;
   width: 100%;
   max-width: 450px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+  border: 1px solid #dbdbdb; /* Instagram 스타일 테두리 */
 }
 
 h1 {
-  color: #ffffff;
+  color: #ff0000;
   margin-bottom: 28px;
   font-size: 32px;
 }
 
 .input-group {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 input[type="email"],
@@ -195,7 +197,7 @@ input[type="password"],
 input[type="text"] {
   width: 100%;
   height: 50px;
-  padding: 16px 20px;
+  padding: 16px 8px;
   border: none;
   border-radius: 4px;
   background-color: #333;
@@ -216,8 +218,8 @@ input[type="text"] {
 }
 
 button {
-  width: 100%;
-  height: 50px;
+  width: 104%;
+  height: 60px;
   background-color: #e50914;
   color: white;
   border: none;
@@ -229,31 +231,34 @@ button {
 }
 
 button:hover {
-  background-color: #f40612;
+  background-color: #c04040;
 }
 
 .switch-form {
-  margin-top: 16px;
-  color: #b3b3b3;
+  margin-top: 20px;
+  color: #ffffff;
   text-align: center;
+  font-size: 14px;
 }
 
 .switch-form span {
-  color: white;
+  color: #ffffff;
   cursor: pointer;
 }
 
 .switch-form span:hover {
-  text-decoration: underline;
+  color: #ff0000;
 }
 
+/* 애니메이션 효과 */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  transform: translateY(10px);
 }
 </style>
