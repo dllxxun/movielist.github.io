@@ -1,12 +1,9 @@
-
 import { createRouter, createWebHistory } from 'vue-router'
 import MovieList from '@/components/MovieList.vue'
 import MovieDetail from '@/views/MovieDetail.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import SignInPage from '@/views/SignIn.vue'
 import WishlistPage from '@/views/WishlistPage.vue'
-import SettingsPage from '../views/SettingsPage.vue'
-
 
 const routes = [
   {
@@ -43,11 +40,6 @@ const routes = [
     path: '/wishlist',
     name: 'Wishlist',
     component: WishlistPage
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: SettingsPage
   }
 ]
 

@@ -1,4 +1,3 @@
-
 <template>
   <div class="auth-container">
     <div class="auth-box" :class="{ 'slide-up': !isLogin }">
