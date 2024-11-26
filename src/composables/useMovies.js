@@ -1,10 +1,10 @@
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { tmdbApi } from '@/api/tmdb'
 
 export function useMovies() {
   const movies = ref([])
-  const loading = ref(true)
+  const loading = ref(false)
 
   const fetchMovies = async () => {
     try {
@@ -14,6 +14,7 @@ export function useMovies() {
       loading.value = false
     }
   }
+  
 
   return {
     movies,
