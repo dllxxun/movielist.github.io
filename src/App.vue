@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="currentTheme">
+  <header :class="{ 'header-scrolled': isScrolled }">
     <nav class="navigation">
       <div class="nav-left">
         <span class="home-link" @click="goToHome">Home</span>
@@ -26,7 +26,7 @@
       <router-view @theme-changed="updateTheme"></router-view>
     </div>
     
-  </div>
+  </header>
 </template>
 
 <script>
@@ -96,6 +96,20 @@ export default {
 </script>
 
 <style>
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.header-scrolled {
+  background-color: rgba(0, 0, 0, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
 /* 전역 스타일 */
 body {
   margin: 0;

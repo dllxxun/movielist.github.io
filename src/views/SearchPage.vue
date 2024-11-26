@@ -1,7 +1,7 @@
 <template>
   <div class="search-page">
     <!-- 필터링 섹션 -->
-    <div class="filters">
+    <div class="filters" >
       <div class="search-input-container">
         <input
           v-model="searchQuery"
@@ -126,11 +126,14 @@ export default {
       recentSearches: [],
       showRecentSearches: false,
       maxRecentSearches: 5,
+      currentFocusIndex: -1,
       loading: true,
       searchQuery: '',
       selectedGenre: '',
       minRating: '',
       sortBy: '',
+      recommendedMovies: [],
+      isRecommended: new Set()
     };
   },
   methods: {
@@ -142,6 +145,24 @@ export default {
         this.loading = false;
       } catch (error) {
         console.error('Error:', error);
+      }
+    },
+    // 키보드 네비게이션 메서드 추가
+    handleKeyNavigation(direction) {
+      if (!this.showRecentSearches || !this.recentSearches.length) return;
+      
+      if (direction === 'down') {
+        this.currentFocusIndex = Math.min(
+          this.currentFocusIndex + 1,
+          this.recentSearches.length - 1
+        );
+      } else {
+        this.currentFocusIndex = Math.max(this.currentFocusIndex - 1, -1);
+      }
+    },
+    handleKeySelect() {
+      if (this.currentFocusIndex >= 0) {
+        this.applyRecentSearch(this.recentSearches[this.currentFocusIndex]);
       }
     },
     handleSearch() {
@@ -242,6 +263,30 @@ export default {
     goToDetail(movieId) {
       this.$router.push(`/movie/${movieId}`);
     },
+    toggleRecommendation(movie) {
+      if (this.isRecommended.has(movie.id)) {
+        this.isRecommended.delete(movie.id);
+        this.recommendedMovies = this.recommendedMovies.filter(m => m.id !== movie.id);
+      } else {
+        this.isRecommended.add(movie.id);
+        this.recommendedMovies.push(movie);
+      }
+      // LocalStorage에 저장
+      this.saveRecommendedMovies();
+    },
+    saveRecommendedMovies() {
+      localStorage.setItem('recommendedMovies', JSON.stringify(this.recommendedMovies));
+      localStorage.setItem('recommendedIds', JSON.stringify([...this.isRecommended]));
+    },
+
+    loadRecommendedMovies() {
+      const savedMovies = localStorage.getItem('recommendedMovies');
+      const savedIds = localStorage.getItem('recommendedIds');
+      if (savedMovies) {
+        this.recommendedMovies = JSON.parse(savedMovies);
+        this.isRecommended = new Set(JSON.parse(savedIds));
+      }
+    }
   },
   created() {
     this.fetchMovies();
@@ -250,6 +295,8 @@ export default {
     if (savedSearches) {
       this.recentSearches = JSON.parse(savedSearches);
     }
+    // 추천 영화 목록 불러오기 추가
+    this.loadRecommendedMovies();
   },
   mounted() {
     // 드롭다운 외부 클릭 시 닫기
@@ -263,6 +310,13 @@ export default {
 </script>
 
 <style scoped>
+/* 키보드 네비게이션을 위한 포커스 스타일 */
+.recent-search-item:focus,
+.movie-card:focus {
+  outline: 2px solid #0095f6;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .search-page {
   padding: 20px;
 }
@@ -443,5 +497,41 @@ export default {
 
 .remove-btn:hover {
   color: #ff0000;
+}
+
+/* 미디어 쿼리 추가 */
+@media screen and (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .search-input-container {
+    width: 100%;
+  }
+  
+  .movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .movie-card {
+    margin-bottom: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .movies-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .movie-info h3 {
+    font-size: 0.8rem;
+  }
+  
+  .rating {
+    font-size: 0.75rem;
+  }
 }
 </style>
