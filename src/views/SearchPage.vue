@@ -2,13 +2,25 @@
   <div class="search-page">
     <!-- 필터링 섹션 -->
     <div class="filters">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="영화 제목 검색"
-        @input="handleSearch"
-      />
-
+      <div class="search-input-container">
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="영화 제목 검색"
+          @input="handleSearch"
+          @focus="showRecentSearches = true"
+          @blur="handleBlur"
+        />
+        <div v-if="showRecentSearches && recentSearches.length > 0" class="recent-searches-dropdown">
+          <div v-for="(search, index) in recentSearches" 
+              :key="index" 
+              class="recent-search-item">
+            <span @click="applyRecentSearch(search)">{{ search }}</span>
+            <button @click.stop="removeRecentSearch(index)" class="remove-btn">×</button>
+          </div>
+        </div>
+      </div>
+    
       <select v-model="selectedGenre" @change="applyFilters">
         <option value="">장르 선택</option>
         <option value="28">액션</option>
@@ -38,7 +50,7 @@
 
       <button @click="resetFilters" class="reset-button">필터 초기화</button>
     </div>
-     <!-- 카테고리별 섹션 추가 -->
+    <!-- 카테고리별 섹션 추가 -->
     <div class="category-section">
       <div class="scroll-container">
         <div
@@ -111,6 +123,9 @@ export default {
     return {
       movies: [],
       filteredMovies: [],
+      recentSearches: [],
+      showRecentSearches: false,
+      maxRecentSearches: 5,
       loading: true,
       searchQuery: '',
       selectedGenre: '',
@@ -130,15 +145,51 @@ export default {
       }
     },
     handleSearch() {
-      if (this.searchQuery) {
-        this.filteredMovies = this.movies.filter((movie) =>
-          movie.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+      if (this.searchQuery.trim()) {
+      // 검색어가 있을 때만 최근 검색어에 저장
+        this.saveRecentSearch(this.searchQuery.trim());
+    
+      // 기존 검색 로직
+        this.filteredMovies = this.movies.filter((movie) => movie.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
       } else {
         this.filteredMovies = [...this.movies];
       }
       this.applyFilters();
     },
+    // 최근 검색어 저장 메소드 추가
+    saveRecentSearch(query) {
+      if (!query) return;
+      
+      let searches = [...this.recentSearches];
+      // 중복 검색어 제거
+      const index = searches.indexOf(query);
+      if (index > -1) {
+        searches.splice(index, 1);
+      }
+      // 새 검색어 추가
+      searches.unshift(query);
+      // 최대 5개로 제한
+      searches = searches.slice(0, this.maxRecentSearches);
+      
+      this.recentSearches = searches;
+      localStorage.setItem('recentSearches', JSON.stringify(searches));
+    },
+    applyRecentSearch(search) {
+      this.searchQuery = search;
+      this.handleSearch();
+      this.showRecentSearches = false;
+    },
+    removeRecentSearch(index) {
+      this.recentSearches.splice(index, 1);
+      localStorage.setItem('recentSearches', JSON.stringify(this.recentSearches));
+    },
+    handleBlur() {
+    // 드롭다운이 바로 사라지지 않도록 지연 설정
+      setTimeout(() => {
+        this.showRecentSearches = false;
+      }, 200);
+    },
+
     applyFilters() {
       let result = [...this.movies];
 
@@ -194,7 +245,20 @@ export default {
   },
   created() {
     this.fetchMovies();
+    // 저장된 최근 검색어 불러오기
+    const savedSearches = localStorage.getItem('recentSearches');
+    if (savedSearches) {
+      this.recentSearches = JSON.parse(savedSearches);
+    }
   },
+  mounted() {
+    // 드롭다운 외부 클릭 시 닫기
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-input-container')) {
+        this.showRecentSearches = false;
+      }
+    });
+  }
 };
 </script>
 
@@ -283,5 +347,101 @@ export default {
   text-align: center;
   padding: 20px;
   font-size: 1.2rem;
+}
+
+.recent-searches {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #141414;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 10px;
+  width: 200px;
+  z-index: 1000;
+}
+
+.recent-searches h4 {
+  margin: 0 0 10px 0;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.recent-search-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.recent-search-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.recent-search-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.remove-search {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.remove-search:hover {
+  color: #ff0000;
+}
+
+/* filters 클래스에 position: relative 추가 */
+.filters {
+  position: relative;
+}
+
+.search-input-container {
+  position: relative;
+  width: 200px;
+}
+
+.recent-searches-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #141414;
+  border: 1px solid #333;
+  border-radius: 4px;
+  margin-top: 4px;
+  z-index: 1000;
+}
+
+.recent-search-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.recent-search-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.remove-btn:hover {
+  color: #ff0000;
 }
 </style>
