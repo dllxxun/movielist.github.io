@@ -9,7 +9,7 @@ import PopularPage from '../views/PopularPage.vue'
 const routes = [
   {
     path: '/',
-    redirect: '/signin'  // 첫 페이지를 로그인 페이지로 리다이렉트
+    redirect: '/signin'
   },
   {
     path: '/signin',
@@ -45,7 +45,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory('/movielist.github.io/'),
   routes
 })
 

@@ -1,7 +1,10 @@
-const { defineConfig } = require('@vue/cli-service')
-module.exports = defineConfig({
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/movielist.github.io/'
-    : '/',
-  outputDir: 'dist'
-})
+module.exports = {
+  publicPath: '/movielist.github.io/',
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      title: 'Movie List',
+      favicon: './public/favicon.ico'
+    }
+  }
+}
