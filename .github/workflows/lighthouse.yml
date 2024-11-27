@@ -8,9 +8,9 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Lighthouse Audit
-        uses: treosh/lighthouse-ci-action@v9
+        uses: treosh/lighthouse-ci-action@v3
         with:
           urls: |
-            https://movielist.github.io/
+            https://dllxxun.github.io/movielist.github.io/
           uploadArtifacts: true
           temporaryPublicStorage: true

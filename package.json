@@ -2,7 +2,10 @@
   "name": "webproject2",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://dllxxun.github.io/movielist.github.io",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "npm run build && gh-pages -b main -d build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -38,11 +41,6 @@
     },
     "rules": {}
   },
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
   
   "browserslist": [
     "> 1%",
@@ -51,3 +49,4 @@
     "not ie 11"
   ]
 }
+

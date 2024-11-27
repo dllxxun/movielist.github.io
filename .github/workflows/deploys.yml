@@ -1,34 +1,59 @@
-name: Deploy to GitHub Pages
+name: Deploy Application
 
 on:
   push:
-    branches:
-      - main
+    branches: [develop, staging, main]
+  pull_request:
+    branches: [develop, staging, main]
 
 jobs:
-  deploy:
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
+      - uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-
-      - name: Install dependencies
+      
+      - name: Install Dependencies
         run: npm install
-
-      - name: Build project
+      
+      - name: Run Tests
+        run: npm test
+      
+      - name: Build
         run: npm run build
-        env:
-          VITE_TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Deploy to Development
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "Deploying to DEV environment"
+          
+      - name: Deploy to Staging
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          echo "Deploying to STAGING environment"
+          
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Deploying to PROD environment"
+  
+  notify:
+    needs: [build-and-test, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification
+        uses: 8398a7/action-slack@v3
         with:
-          branch: gh-pages
-          folder: dist
-          clean: true
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
