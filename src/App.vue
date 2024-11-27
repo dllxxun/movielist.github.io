@@ -1,13 +1,4 @@
 <template>
-  <div>
-    <h1>
-      <router-link to="/">movielist.github.io</router-link>
-    </h1>
-    <!-- 또는 -->
-    <h1>
-      <a href="https://dllxxun.github.io/movielist.github.io/">movielist.github.io</a>
-    </h1>
-  </div>
   <div id="app">
     <nav class="navigation">
       <div class="nav-left">
@@ -212,13 +203,13 @@ body {
 }
 
 /* 링크 스타일 */
+/* 링크 스타일 */
 a {
-  color: #0366d6;
-  text-decoration: none;
+  color: #e5e5e5;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: #ffffff;
 }
 
 /* 활성 링크 스타일 */
