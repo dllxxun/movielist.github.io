@@ -2,13 +2,14 @@
   "name": "webproject2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dllxxun.github.io/movielist.github.io",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
+    "format": "prettier --write .",
+    "pre-commit": "npm run lint && npm run test",
+    "test": "vue-cli-service test:unit"
   },
   "dependencies": {
     "axios": "^1.7.7",
