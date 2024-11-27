@@ -5,7 +5,8 @@
   
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-cli-service build",
+    "start": "vue-cli-service serve",
     "serve": "vite preview",
     "predeploy": "npm run build",
     "deploy": "netlify deploy --prod"
