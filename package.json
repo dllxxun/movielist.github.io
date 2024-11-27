@@ -2,13 +2,13 @@
   "name": "webproject2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dllxxun-homeflix.netlify.app",
+  
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "netlify deploy --prod",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "deploy": "netlify deploy --prod"
   },
   "dependencies": {
     "axios": "^1.7.7",
