@@ -26,6 +26,11 @@
               allowfullscreen
             ></iframe>
           </div>
+          <!-- 비디오 플레이어 추가 -->
+          <div class="video-section">
+            <video ref="videoPlayer" class="video-player"></video>
+            <button @click="playVideo">재생</button>
+          </div>
         </div>
       </div>
     </div>
@@ -34,6 +39,7 @@
 
 <script>
 import { tmdbApi } from '@/api/tmdb'
+import { ref, onMounted } from 'vue'
 
 export default {
   name: 'MovieDetail',
@@ -42,6 +48,24 @@ export default {
       movie: null,
       trailerKey: null,
       isFavorite: false
+    }
+  },
+  setup() {
+    const videoPlayer = ref(null)
+    
+    const playVideo = () => {
+      if (videoPlayer.value) {
+        videoPlayer.value.play()
+      }
+    }
+
+    onMounted(() => {
+      console.log('비디오 플레이어 참조:', videoPlayer.value)
+    })
+
+    return {
+      videoPlayer,
+      playVideo
     }
   },
   async created() {
@@ -220,5 +244,15 @@ h1 {
   width: 100%;
   height: 400px;
   border-radius: 8px;
+}
+
+.video-section {
+  margin-top: 20px;
+}
+
+.video-player {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 10px;
 }
 </style>

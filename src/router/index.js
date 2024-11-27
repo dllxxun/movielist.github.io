@@ -4,6 +4,7 @@ import MovieDetail from '@/views/MovieDetail.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import SignInPage from '@/views/SignIn.vue'
 import WishlistPage from '@/views/WishlistPage.vue'
+import PopularPage from '../views/PopularPage.vue'
 
 const routes = [
   {
@@ -15,7 +16,7 @@ const routes = [
     name: 'SignIn',
     component: SignInPage
   },
-  {
+  { 
     path: '/home',
     name: 'Home',
     component: MovieList,
@@ -34,7 +35,7 @@ const routes = [
   {
     path: '/popular',
     name: 'Popular',
-    component: () => import('@/views/PopularPage.vue')
+    component: PopularPage
   },
   {
     path: '/wishlist',

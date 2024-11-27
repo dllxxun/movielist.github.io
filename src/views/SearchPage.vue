@@ -8,6 +8,7 @@
           type="text"
           placeholder="영화 제목 검색"
           @input="handleSearch"
+        
           @focus="showRecentSearches = true"
           @blur="handleBlur"
         />
@@ -116,6 +117,8 @@
 
 <script>
 import { tmdbApi } from '@/api/tmdb';
+import { useMovieSearch } from '../composables/useMovieSearch'
+import MovieList from '../components/MovieList.vue'
 
 export default {
   name: 'SearchPage',
@@ -134,6 +137,29 @@ export default {
     };
   },
   methods: {
+    components: {
+    MovieList
+    },
+    setup() {
+      const {
+        searchQuery,
+        searchResults,
+        isLoading,
+        error,
+        hasResults,
+        searchMovies,
+        clearSearch
+      } = useMovieSearch()
+      return {
+        searchQuery,
+        searchResults,
+        isLoading,
+        error,
+        hasResults,
+        searchMovies,
+        clearSearch
+      }
+    },
     async fetchMovies() {
       try {
         const response = await tmdbApi.getPopular();
