@@ -2,6 +2,8 @@
 # Movie List Web Application
 ![alt text](image.png)
 
+https://homeflix-movielist.netlify.app/
+
 ## 프로젝트 개요
 넷플릭스 스타일의 영화 목록 웹 애플리케이션입니다.
 이 프로젝트는 넷플릭스 스타일의 영화 목록 웹 애플리케이션을 개발하는 것입니다. 사용자는 TMDB API에서 제공하는 다양한 영화 정보를 검색하고 자신만의 위시리스트를 생성 및 관리할 수 있습니다. Vue.js 3와 Composition API를 기반으로 개발했으며,직관적인 UI와 편리한 기능들로 사용자 경험을 극대화하고 있습니다.
