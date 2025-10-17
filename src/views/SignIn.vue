@@ -29,6 +29,7 @@
             </label>
           </div>
           <button type="submit">로그인</button>
+          <KakaoLogin />
           <p class="switch-form">
             계정이 없으신가요? 
             <span @click="toggleForm">회원가입</span>
@@ -89,8 +90,13 @@
 </template>
 
 <script>
+import KakaoLogin from '../components/KakaoLogin.vue'
+
 export default {
   name: 'SignInPage',
+  components: {
+    KakaoLogin
+  },
   data() {
     return {
       isLogin: true,
